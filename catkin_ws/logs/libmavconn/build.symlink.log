@@ -1,5 +1,0 @@
-Symlinking /home/nick/AMRA-Code-Repository/catkin_ws/devel/lib/libmavconn.so
-Symlinking /home/nick/AMRA-Code-Repository/catkin_ws/devel/lib/pkgconfig/libmavconn.pc
-Symlinking /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconnConfig.cmake
-Symlinking /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconnConfig-version.cmake
-Symlinking /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconn-extras.cmake

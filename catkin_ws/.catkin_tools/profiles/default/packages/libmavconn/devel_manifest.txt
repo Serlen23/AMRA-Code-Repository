@@ -1,7 +1,0 @@
-mavros/libmavconn
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/cmake.lock /home/nick/AMRA-Code-Repository/catkin_ws/devel/./cmake.lock
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/lib/libmavconn.so /home/nick/AMRA-Code-Repository/catkin_ws/devel/lib/libmavconn.so
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/lib/pkgconfig/libmavconn.pc /home/nick/AMRA-Code-Repository/catkin_ws/devel/lib/pkgconfig/libmavconn.pc
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/share/libmavconn/cmake/libmavconnConfig.cmake /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconnConfig.cmake
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/share/libmavconn/cmake/libmavconnConfig-version.cmake /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconnConfig-version.cmake
-/home/nick/AMRA-Code-Repository/catkin_ws/devel/.private/libmavconn/share/libmavconn/cmake/libmavconn-extras.cmake /home/nick/AMRA-Code-Repository/catkin_ws/devel/share/libmavconn/cmake/libmavconn-extras.cmake
