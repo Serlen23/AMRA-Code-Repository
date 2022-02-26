@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     pose.pose.position.z = 2;
 
     //send a few setpoints before starting
-    for(int i = 1000; ros::ok() && i > 0; --i){
+    for(int i = 200; ros::ok() && i > 0; --i){
         local_pos_pub.publish(pose);
         ros::spinOnce();
         rate.sleep();
@@ -57,6 +57,8 @@ int main(int argc, char **argv)
     arm_cmd.request.value = true;
 
     ros::Time last_request = ros::Time::now();
+    ros::Time oscillation = ros::Time::now();
+    int changeinfo = 0;
 
     while(ros::ok()){
         if( current_state.mode != "OFFBOARD" &&
@@ -76,12 +78,24 @@ int main(int argc, char **argv)
                 last_request = ros::Time::now();
             }
         }
+        if(ros::Time::now() - oscillation > ros::Duration(4.0)) {
+           if (changeinfo){
+                changeinfo = 0;
+                pose.pose.position.x = 0;
+            } else {
+                changeinfo = 1;
+                pose.pose.position.x = 3;
+            } 
+            oscillation = ros::Time::now();
+        }
 
         local_pos_pub.publish(pose);
 
         ros::spinOnce();
         rate.sleep();
     }
+
+    ROS_INFO("Out of While Loop");
 
     return 0;
 }
