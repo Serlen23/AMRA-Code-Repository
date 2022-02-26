@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 #From https://gist.github.com/dsposito/b702b582d994a57b5801da988687753d
 
+import imp
 import rospy
 from mavros_msgs.srv import SetMode
 from mavros_msgs.srv import CommandBool
 from mavros_msgs.srv import CommandTOL
 import time
+import math
+from geometry_msgs.msg import PoseStamped
 
 rospy.init_node('mavros_takeoff_python')
 rate = rospy.Rate(10)
