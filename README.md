@@ -4,3 +4,4 @@ All project codes will be put here
 # Contributors
 Nick Serle
 Connor Bramhall
+Tim Mascal
