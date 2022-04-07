@@ -17,6 +17,7 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
 
 int main(int argc, char **argv)
 {
+    ROS_INFO("Starting C++ Script.");
     ros::init(argc, argv, "offb_node");
     ros::NodeHandle nh;
 
