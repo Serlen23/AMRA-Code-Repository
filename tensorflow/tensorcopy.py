@@ -118,6 +118,12 @@ with detection_graph.as_default():
                 [boxes, scores, classes, num_detections],
                 feed_dict={image_tensor: image_np_expanded})
 
+            for i in range(len(scores)):
+                if(scores[i]>0.6):
+                    if(classes[i]==0.62):
+                        pub.publish(boxes[i])
+
+
             #My bullshit to display data
             print("Location:")
             print(boxes)
