@@ -26,14 +26,20 @@ pose.twist.angular.y = 0
 pose.twist.angular.z = 0
 
 def callback(data):
-    xNormCenter = data[0] + ((data[2] - data[0])/2)
-    yNormCenter = data[1] + ((data[3] - data[1])/2)
+    xNormCenter = data.data[0] + ((data.data[2] - data.data[0])/2)
+    yNormCenter = data.data[1] + ((data.data[3] - data.data[1])/2)
     pointX = xNormCenter - 0.5 
     pointY = yNormCenter - 0.5
+    pose.twist.linear.x = 0.3
     pose.twist.angular.y = -pointX
     pose.twist.angular.z = -pointY
+    print("\nGoing to %s", pose.twist.angular) 
     local_tst_pub.publish(pose)
 
+def listener():
+    rospy.Subscriber('boundingboxes', Float64MultiArray, callback)
+    print("\nListener Active")
+    rospy.spin()
 
 for i in range(0,200): #for 200 iterations
     local_tst_pub.publish(pose) #send the current position message object
@@ -42,7 +48,7 @@ for i in range(0,200): #for 200 iterations
 print("\nSetting Mode")
 rospy.wait_for_service('/mavros/set_mode') #Wait here until the mavros node has created the topic "set_mode"
 try:
-    response = set_mode_client(custom_mode="OFFBOARD") #The control method we're using requires the mode to be set to OFFBOARD or STABILIZED.
+    response = set_mode_client(custom_mode="VELHOLD") #The control method we're using requires the mode to be set to OFFBOARD or STABILIZED.
     rospy.loginfo(response) #Log the response from the service for debugging
 except rospy.ServiceException as e:
     print("Set mode failed: %s" %e) #if an exception (error) is thrown at any point in the try loop, print an error message and move on.
@@ -55,8 +61,7 @@ try:
 except rospy.ServiceException as e:
     print("Arming failed: %s" %e)
     
-rospy.Subscriber('boundingboxes', Float64MultiArray, callback)
-rospy.spin()
+listener()
 
 print ("\nDisarming")
 rospy.wait_for_service('/mavros/cmd/arming') #Wait here until the mavros node has created the topic "cmd/arming"

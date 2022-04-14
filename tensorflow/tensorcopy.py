@@ -127,7 +127,8 @@ with detection_graph.as_default():
             (boxes, scores, classes, num_detections) = sess.run(
                 [boxes, scores, classes, num_detections],
                 feed_dict={image_tensor: image_np_expanded})
-
+            
+            pinged = 0
             for i in range(len(scores[0])):
                 if(scores[0][i] > 0.6):
                     if(classes[0][i] == 1):
@@ -136,7 +137,9 @@ with detection_graph.as_default():
                         tosend.data = tosenddata
                         pub.publish(tosend)
                         print(tosenddata)
-
+                        pinged = 1
+            if pinged == 1:
+                 time.sleep(1)
 
             #My bullshit to display data
 #            print("Location:")
