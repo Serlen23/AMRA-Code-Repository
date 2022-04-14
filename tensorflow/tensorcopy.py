@@ -30,10 +30,12 @@ from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import Float64MultiArray
 
-pub = rospy.Publisher('boundingboxes', String, queue_size=10)
+pub = rospy.Publisher('boundingboxes', Float64MultiArray, queue_size=10)
 rospy.init_node('boxtalker')
+
+
 
 # Define the video stream
 cap = cv2.VideoCapture(0)  # Change only if you have more than one webcams
@@ -89,11 +91,19 @@ def load_image_into_numpy_array(image):
     return np.array(image.getdata()).reshape(
         (im_height, im_width, 3)).astype(np.uint8)
 
+start_time = time.time()#Start Stopwatch
+detection_iteration = 0#Start detection count
+
+
+
 
 # Detection
 with detection_graph.as_default():
     with tf.compat.v1.Session(graph=detection_graph) as sess:
         while True:
+
+            detection_iteration = detection_iteration + 1 #count detection iteration
+
             # Read frame from camera
             ret, image_np = cap.read()
             # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
@@ -118,41 +128,47 @@ with detection_graph.as_default():
                 [boxes, scores, classes, num_detections],
                 feed_dict={image_tensor: image_np_expanded})
 
-            for i in range(len(scores)):
-                if(scores[i]>0.6):
-                    if(classes[i]==0.62):
-                        pub.publish(boxes[i])
+            for i in range(len(scores[0])):
+                if(scores[0][i] > 0.6):
+                    if(classes[0][i] == 1):
+                        tosend = Float64MultiArray()
+                        tosenddata = [boxes[0][i][0], boxes[0][i][1], boxes[0][i][2], boxes[0][i][3]]
+                        tosend.data = tosenddata
+                        pub.publish(tosend)
+                        print(tosenddata)
 
 
             #My bullshit to display data
-            print("Location:")
-            print(boxes)
-            bbox_str = "bounding box for target: %s" % boxes
-            rospy.loginfo(bbox_str)
-            pub.publish(bbox_str)
-            print("Class:")
-            print(classes)
-            print("Confidence:")
-            print(scores)
+#            print("Location:")
+#            print(boxes)
+#            bbox_str = "bounding box for target: %s" % boxes
+#            rospy.loginfo(bbox_str)
+#            pub.publish(bbox_str)
+#            print("Class:")
+#            print(classes)
+#            print("Confidence:")
+#            print(scores)
 
 
-            time.sleep(1) #wait for 1 sec
+
+#            print("--- %s seconds ---" % (time.time() - start_time))
+#            print("Detection Iteration is %d" % detection_iteration)
+
+           # time.sleep(1) #wait for 1 sec
 
 
-            # Visualization of the results of a detection.
-            vis_util.visualize_boxes_and_labels_on_image_array(
-                image_np,
-                np.squeeze(boxes),
-                np.squeeze(classes).astype(np.int32),
-                np.squeeze(scores),
-                category_index,
-                use_normalized_coordinates=True,
-                line_thickness=8)
-
-            # Display output
-            cv2.imshow('object detection', cv2.resize(image_np, (800, 600)))
-
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
-                break
-
+#            # Visualization of the results of a detection.
+#            vis_util.visualize_boxes_and_labels_on_image_array(
+#                image_np,
+#                np.squeeze(boxes),
+#                np.squeeze(classes).astype(np.int32),
+#                np.squeeze(scores),
+#                category_index,
+#                use_normalized_coordinates=True,
+#                line_thickness=8)
+#
+#            # Display output
+#            cv2.imshow('object detection', cv2.resize(image_np, (800, 600)))
+#            if cv2.waitKey(25) & 0xFF == ord('q'):
+#                cv2.destroyAllWindows()
+#                break
